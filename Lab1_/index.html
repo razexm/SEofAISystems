@@ -1,0 +1,133 @@
+<!-- <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Веб-страница с выпадающими списками и кнопками</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            width: 30%;
+            padding: 10px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Выберите параметры</h2>
+
+    <label for="select1">Поле 1:</label>
+    <select id="select1">
+        <option value="option1">Опция 1</option>
+        <option value="option2">Опция 2</option>
+        <option value="option3">Опция 3</option>
+    </select>
+
+    <label for="select2">Поле 2:</label>
+    <select id="select2">
+        <option value="option1">Опция A</option>
+        <option value="option2">Опция B</option>
+        <option value="option3">Опция C</option>
+    </select>
+
+    <label for="select3">Поле 3:</label>
+    <select id="select3">
+        <option value="option1">Опция X</option>
+        <option value="option2">Опция Y</option>
+        <option value="option3">Опция Z</option>
+    </select>
+
+    <div style="text-align: center;">
+        <button onclick="handleButtonClick('Кнопка 1')">Кнопка 1</button>
+        <button onclick="handleButtonClick('Кнопка 2')">Кнопка 2</button>
+        <button onclick="handleButtonClick('Кнопка 3')">Начать снова</button>
+    </div>
+</div>
+
+<script>
+    function handleButtonClick(buttonName) {
+        alert(buttonName + ' нажата!');
+    }
+</script>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Текущий Вопрос</title>
+</head>
+<body>
+
+<h2>Текущий Вопрос</h2>
+<div>
+    <label for="current-question">Текущий вопрос:</label>
+    <input type="text" id="current-question" readonly>
+</div>
+
+<div>
+    <label for="edges-select">Выберите следующий шаг:</label>
+    <select id="edges-select">
+        <option value="">Загрузка...</option>
+    </select>
+</div>
+
+<script>
+async function fetchCurrentState() {
+    const response = await fetch('http://localhost:8000/current-state/');
+    const data = await response.json();
+    document.getElementById('current-question').value = data.state; // Установим текущее состояние
+}
+
+async function fetchEdges() {
+    const response = await fetch('http://localhost:8000/edges/');
+    const edges = await response.json();
+    
+    const select = document.getElementById('edges-select');
+    select.innerHTML = ''; // Очищаем предыдущие опции
+
+    edges.forEach(edge => {
+        const option = document.createElement('option');
+        option.value = edge.finish;
+        option.textContent = edge.finish; // Здесь можно изменить текст на более информативный
+        select.appendChild(option);
+    });
+}
+
+fetchCurrentState();
+fetchEdges();
+</script>
+
+</body>
+</html>
